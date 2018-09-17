@@ -145,5 +145,7 @@ public class Model {
 
         //update the major
         existing.setMajor(student.getMajor());
+
+        existing.setClassStanding(student.getClassStanding());
     }
 }

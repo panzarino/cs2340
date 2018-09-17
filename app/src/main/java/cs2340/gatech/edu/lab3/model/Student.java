@@ -33,6 +33,8 @@ public class Student implements Parcelable {
     /** this students major */
     private String _major;
 
+    private ClassStanding _class;
+
 
     /* **********************
      * Getters and setters
@@ -45,6 +47,9 @@ public class Student implements Parcelable {
 
     public String getMajor() {return _major; }
     public void setMajor(String major) { _major = major; }
+
+    public ClassStanding getClassStanding() { return _class; }
+    public void setClassStanding(ClassStanding classStanding) { _class = classStanding; }
 
     /**
      * Lookup a major based on its code.  Returns the postion of that
@@ -63,6 +68,24 @@ public class Student implements Parcelable {
         return 0;
     }
 
+    /**
+     * Lookup a class based on its code.  Returns the postion of that
+     * class in the array
+     *
+     * @param code the class to find
+     *
+     * @return the index of the array that corresponds to the submitted class
+     */
+    public static int findPosition(ClassStanding code) {
+        int i = 0;
+        ClassStanding[] classes = ClassStanding.values();
+        while (i < classes.length) {
+            if (code.equals(classes[i])) return i;
+            ++i;
+        }
+        return 0;
+    }
+
 
     /**
      * Make a new student
@@ -70,8 +93,19 @@ public class Student implements Parcelable {
      * @param major     the student's major
      */
     public Student(String name, String major) {
+        this(name, major, ClassStanding.FRESHMAN);
+    }
+
+    /**
+     * Make a new student
+     * @param name      the student's name
+     * @param major     the student's major
+     * @param classStanding the student's class standing
+     */
+    public Student(String name, String major, ClassStanding classStanding) {
         _name = name;
-        _major= major;
+        _major = major;
+        _class = classStanding;
         _id = Student.Next_Id++;
     }
 
@@ -89,7 +123,7 @@ public class Student implements Parcelable {
      */
     @Override
     public String toString() {
-        return _name + " " + _major;
+        return _name + " " + _major + " " + _class;
     }
 
 
@@ -113,8 +147,7 @@ public class Student implements Parcelable {
         _name = in.readString();
         _major = in.readString();
         _id = in.readInt();
-
-
+        _class = (ClassStanding) in.readSerializable();
     }
 
     @Override
@@ -132,8 +165,7 @@ public class Student implements Parcelable {
          dest.writeString(_name);
          dest.writeString(_major);
          dest.writeInt(_id);
-
-
+         dest.writeSerializable(_class);
     }
 
     /**
